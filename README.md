@@ -1,6 +1,7 @@
 # Quake Team Fortress Server
 
 ## Overview
+
 This repository has all the files needed to run a Team Fortress server on a Linux machine.
 
 1. Clone this repo `git clone https://github.com/rictorres/quake-team-fortress-server.git` or download the [zipball](https://github.com/rictorres/quake-team-fortress-server/archive/master.zip)
@@ -9,12 +10,14 @@ This repository has all the files needed to run a Team Fortress server on a Linu
 
 
 ## Requirements
+
 - Linux server (preferably Ubuntu)
 - SSH
 - Screen
 
 
 ## Installation
+
 ```
 $ sudo apt-get update
 $ sudo apt-get install screen
@@ -25,12 +28,15 @@ $ chmod 755 start-priv2
 
 
 ## Running
+
 - Public server (default port 27500)
+
   ```
   ./start-public
   RUNNING TEAM FORTRESS PUBLIC SERVER ON PORT 27500
   ```
 - Private server (default port 27501)
+
   ```
   ./start-priv1
   RUNNING TEAM FORTRESS PUBLIC SERVER ON PORT 27501
@@ -40,6 +46,7 @@ You can edit `start-public` and `start-priv[#]` as needed.
 
 
 ## Additional info
+
 - To get a list of `screens` in use:
   `$ screen -list`
 - To re-attach the screen
@@ -49,4 +56,5 @@ You can edit `start-public` and `start-priv[#]` as needed.
 
 
 ## Credits
+
 - [SLUSAMSON](http://www.bluemunkey.com/?p=124)
