@@ -1,2 +1,2 @@
 echo RUNNING TEAM FORTRESS PRIVATE SERVER ON PORT 27501
-screen -A -m -d -S qwtf-priv1 ./mvdsv -port 27501 -game fortress +exec server.cfg +exec server-private.cfg
+screen -A -m -d -S qwtf-priv1 ./mvdsv -port 27501 -game fortress +exec server.cfg +exec server-private.cfg +exec server-port-27501.cfg +exec server-private-admin.cfg
