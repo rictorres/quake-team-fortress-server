@@ -3,7 +3,7 @@
 ## Overview
 This repository has all the files needed to run a Team Fortress server on a Linux machine.
 
-1. Clone this repo `git clone https://github.com/rictorres/quake-teamfortress.git` or download the [zipball](https://github.com/rictorres/quake-teamfortress/archive/master.zip)
+1. Clone this repo `git clone https://github.com/rictorres/quake-team-fortress-server.git` or download the [zipball](https://github.com/rictorres/quake-team-fortress-server/archive/master.zip)
 2. Run `./start-public` or `start-priv[#]` (it will be attached to a different screen called `qwtf-pub` or `qwtf-priv[#]`, useful if you're using SSH)
 3. Profit!
 
