@@ -1,0 +1,481 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>ThunderVote Docs</title>
+</head>
+
+<body bgcolor="#000000" text="#FFFFFF" link="#00FFFF" vlink="#00FFFF" alink="#0000FF">
+<div align="center"><center>
+
+<table border="0" width="600" cellpadding="10" cellspacing="0">
+  <tr>
+    <td bgcolor="#008080"><font face="Verdana" size="4"><em><strong>Last Updated 06-05-2000</strong></em></font></td>
+  </tr>
+  <tr>
+    <td bgcolor="#204040" valign="top"><font face="Verdana" size="4"><strong>Contents<br>
+    </strong></font><table border="0" cellpadding="5" cellspacing="0" width="100%">
+      <tr>
+        <td width="50%" valign="top"><font size="2"><font face="Arial" size="2"><a href="#Intro">Introduction</a><br>
+        <a href="#Install">Installation</a></font><font size="1" face="Arial"><br>
+        </font></font><font face="Arial" size="2"><a href="#TVCFG">The THUNDERVOTE.CFG</a><br>
+        </font><font size="1" face="Arial">- <a href="#TVMin">&quot;MIN&quot; Conditions</a><br>
+        - <a href="#TVNuf">&quot;NUF&quot; Conditions</a><br>
+        </font><font face="Arial" size="2"><a href="#STDCFG"><font size="2">The STANDARD.CFG</font></a><br>
+        <a href="#MODCFG">Mod-Specific Configurations</a></font><font size="1" face="Arial"><br>
+        - <a href="#MODTF">TeamFortress</a><br>
+        - <a href="#MODRACTF">Rocket Arena and CTF</a><br>
+        - <a href="#MODOTHER">Support for Other Mods</a></font></td>
+        <td width="50%" valign="top"><font face="Arial" size="2"><a href="#MAPENT"><font size="2">ThunderVote
+        Map Entities</font></a><br>
+        </font><font size="1" face="Arial">- <a href="#MAPCAND">Map Candidate</a><br>
+        - <a href="#MAPMOTD">MOTD Stuff</a><br>
+        </font><font face="Arial" size="2"><a href="#USERKEY"><font size="2">Userinfo Keys</font></a><br>
+        </font><font size="1" face="Arial">- <a href="#USERSERVER">Server Options</a> (set using
+        serverinfo/localinfo command)<br>
+        - <a href="#USERCLIENT">Client Options</a> (set using setinfo command)<br>
+        </font><font face="Arial" size="2"><a href="#VERSION"><font size="2">Version Info</font></a><br>
+        </font><font size="1" face="Arial">- <a href="#V20">Changes to ThunderVote 2.0</a><br>
+        - <a href="#V10">Changes to ThunderVote 1.0</a><br>
+        - <a href="#VF11">Changes to FortVote 1.1</a></font></td>
+      </tr>
+    </table>
+    <font size="4"><hr>
+    <p><a name="Intro"></a><font face="Verdana"><strong>Introduction</strong></font></p>
+    <p></font><font SIZE="2"><font face="Arial">ThunderVote is a QuakeWorld server-side patch
+    that makes map voting possible for any mod. It was first developed for TeamFortress but
+    support for other mods can be made available. It uses the &quot;sv_gamedir&quot; command
+    (included in QW since version 1.64) to have the server switch gamedir directories back and
+    forth (thus allowing it to run the ThunderVote qwprogs.dat in between maps) but leaving
+    sv_gamedir constant, so the client won&#146;t be told to change gamedir every time.</font></p>
+    <hr>
+    <p><a name="Install"></a><font face="Verdana" size="4"><strong>Installation</strong></font></p>
+    <blockquote>
+      <ol>
+        <li><font face="Arial">Download the latest version of the ThunderVote mod (<a
+          href="http://www.planetfortress.com/tvote/files/files.htm">http://www.planetfortress.com/tvote/files/files.htm</a>)</font></li>
+        <li><font face="Arial">Unzip the files in a new quake subdirectory called /thundervote (it
+          can be called whatever you like, as long as you change all references to the default
+          &quot;thundervote&quot; gamedir in the .cfg files)</font></li>
+        <li><font face="Arial">Move the files from the thundervote/themod directory to the
+          server&#146;s default gamedir directory (if it&#146;s a TeamFortress server, put them
+          inside /fortress)</font></li>
+        <li><font face="Arial">If you want to have the server run ThunderVote when it starts, add
+          this command to the server.cfg: &quot;exec thundervote.cfg&quot;</font></font></li>
+        <li><font face="Arial" SIZE="2">Set your own list of maps by editing the voting map&#146;s
+          entities (check the &quot;ThunderVote Map Entities&quot; section for details). The map
+          will go inside thundervote/maps.</font></li>
+        <li><font face="Arial" SIZE="2">Define default settings for all maps in the standard.cfg and
+          vote settings in the thundervote.cfg.</font></li>
+        <li><font face="Arial" SIZE="2">Make sure you enable settings on the mod you&#146;re using
+          to have it run ThunderVote again -- with TeamFortress, you can do so by including a
+          &quot;exec thundervote.cfg&quot; line in qwmcycle/map1.cfg and setting qwmcycle/map2.cfg
+          to do a &quot;serverinfo n 0&quot;. See &quot;TF-Specific Configuration&quot; section and
+          TF docs for more info.</font></li>
+      </ol>
+    </blockquote>
+    <font size="4"><hr>
+    <p><a name="TVCFG"></a><strong><font face="Verdana">The THUNDERVOTE.CFG</font></strong></p>
+    <p></font><font SIZE="2"><font face="Arial">This is the script file that has the voting
+    configuration commands. It usually looks like this:</font></p>
+    <blockquote>
+      <p></font><font face="Arial" color="#FF8000" SIZE="2">gamedir thundervote<br>
+      sv_gamedir fortress </font><font face="Arial" SIZE="2" color="#C0C0C0">// assuming
+      it&#146;s a TeamFortress game<br>
+      </font><font face="Arial" color="#FF8000"><small>localinfo min_votes 10<br>
+      localinfo nuf_votes 20<br>
+      localinfo min_approval 0.5<br>
+      localinfo nuf_approval 24<br>
+      localinfo min_time 1<br>
+      localinfo nuf_time 3<br>
+      localinfo no_since 5</small><br>
+      <small>...<br>
+      </small></font><font SIZE="2"><font face="Arial" color="#FF8000" SIZE="2">map vote40</font></p>
+    </blockquote>
+    <p><font face="Arial">Timelimit and fraglimit now have no meaning in ThunderVote. Voting
+    rules are determined by 6 keys: min_votes, nuf_votes, min_approval, nuf_approval,
+    min_time, nuf_time.</font></p>
+    <p></font><a name="TVMin"></a><font size="3"><strong><font face="Arial">&quot;Min&quot;
+    conditions</font></strong><ul>
+      <li></font><em><strong><font size="3" face="Arial">min_votes</font><font SIZE="2"
+        face="Arial">:</strong></em> voting evaluation will not occur unless there is this minimum
+        amount of votes. If it is assigned a value &gt; 1, it assumes you are defining number of
+        votes. If you assign a number between 0 and 1, it assumes you're defining a percentage of
+        number of voters in relation to the number of players currently connected (i.e., a value
+        of 0.1 = 10% voters, 0.67 = 67% voters, 12 = 12 voters). If unassigned or assigned a value
+        of 0, evaluation can occur with any number of votes.</font><font SIZE="2"></li>
+      <li></font><strong><em><font size="3" face="Arial">min_approval</font><font SIZE="2"
+        face="Arial">:</em></strong> voting evaluation will not occur unless the map with most
+        votes has at least this minimum amount of votes. If assigned a value &gt; 1, it assumes
+        you are defining number of votes. If you assign a number between 0 and 1, it assumes
+        you're defining a percentage of number of votes for a certain map in relation to the total
+        of votes. If unnasigned or assigned a value of 0, evaluation can occur whatever the
+        approval.</font><font SIZE="2"></li>
+      <li></font><em><strong><font size="3" face="Arial">min_time</font><font SIZE="2"
+        face="Arial">:</strong></em> voting evaluation will only happen after a certain amount of
+        time has passed since the first player arrived in the server (timer is reset if there are
+        no players in the server). Value corresponds to # of minutes. If unassigned or assigned a
+        value of 0, evaluation can occur anytime.</font><font SIZE="2"></li>
+    </ul>
+    <p><font face="Arial">All defined minimum conditions must be satisfied before voting
+    evaluation can occur, unless a &quot;nuf&quot; condition is satisfied, in which case,
+    &quot;min&quot; conditions will be ignored -- for instance, if you define a
+    &quot;min_votes 7&quot; and a &quot;nuf_votes 0.9&quot;, if there are not at least 7 votes
+    but at least 90% of players have voted, evaluation will occur (provided there are no
+    draws).</font></p>
+    <p></font><a name="TVNuf"></a><font size="3"><strong><font face="Arial">&quot;Nuf&quot;
+    conditions</font></strong><ul>
+      <li><em><strong><font size="3" face="Arial">nuf_votes</font><font SIZE="2" face="Arial">:</strong></em>
+        voting evaluation will occur if there are a certain number of votes. If assigned a value
+        &gt; 1, it assumes you are defining number of votes. If you assign a number between 0 and
+        1, it assumes you're defining a percentage of number of voters in relation to the number
+        of players currently connected -- <font color="#FFFF00"><strong><em>NOTE:</em> <em>using a
+        percentage for nuf_votes can lead to undesirable premature results if a server starts and
+        the first player that joins in votes immediately (resulting in 100% voters and therefore
+        satisfying the condition).</em></strong></font></font></li>
+      <li><font face="Arial"><em><strong>nuf_approval:</strong></em><font SIZE="2"> voting
+        evaluation will occur if the map with most votes has at least this amount of votes. If you
+        assign a value &gt; 1, it assumes you are defining number of votes. If you assign a number
+        between 0 and 1, it assumes you're defining a percentage of number of votes for a certain
+        map in relation to the total of votes -- </font></font><font SIZE="2" face="Arial"
+        color="#FFFF00"><strong><em>NOTE:</em> <em>using a percentage for nuf_approval can lead to
+        undesirable premature results if a server starts and the first player that joins in votes
+        immediately (resulting in 100% approval and therefore satisfying the condition).</em></strong></font></li>
+      <li></font><font face="Arial" size="3"><em><strong>nuf_time:</strong></em> </font><font
+        face="Arial" size="2">voting evaluation will happen after this certain amount of time has
+        passed since the first player arrived in the server (timer is reset if there are no
+        players in the server). Value corresponds to # of minutes. If unassigned or assigned a
+        value of 0, evaluation can occur anytime. If there is a draw, anarchy mode is enabled.</font></li>
+    </ul>
+    <font SIZE="2"><p><font face="Arial">Evaluation occurs i</font></font><font face="Arial"
+    size="2">f at least one &quot;nuf&quot; condition is satisfied and there are no draws.</font><font
+    size="2"></p>
+    <hr>
+    <p></font><a name="STDCFG"></a><font size="4"><strong><font face="Verdana">The
+    STANDARD.CFG</font></strong></p>
+    <p></font><font size="2"><font face="Arial">This script file is executed before any map is
+    chosen. It MUST have this line:</font></p>
+    <blockquote>
+      <p></font><font face="Arial" color="#FF8000" SIZE="2">gamedir fortress </font><font
+      face="Arial" SIZE="2" color="#C0C0C0">// assuming it&#146;s a TeamFortress game</font><font
+      SIZE="2"></p>
+    </blockquote>
+    <p><font face="Arial">You should set other standard variables in it, like:</font></p>
+    <blockquote>
+      <p></font><font face="Arial" color="#FF8000" SIZE="2">timelimit 60 </font><font
+      face="Arial" SIZE="2" color="#C0C0C0">// whatever value you use for your maps</font><font
+      face="Arial" color="#FF8000" SIZE="2"><br>
+      fraglimit 100 </font><font face="Arial" SIZE="2" color="#C0C0C0">// whatever value you use
+      for your maps</font><font face="Arial" color="#FF8000" SIZE="2"><br>
+      etc.</font><font SIZE="2"></p>
+    </blockquote>
+    <p><font face="Arial">For map specific configurations, you can set localinfo map_cfgs to 1
+    so that, after standard.cfg is executed, ThunderVote will attempt to run a script file
+    inside a /QWMCYCLE directory with a name that corresponds to the name of the chosen map
+    (Ex.: if chosen map is 2fort5, it tries to exec a qwmcycle/2fort5.cfg, if map is called
+    &quot;whatever&quot;, it runs a qwmcycle/whatever.cfg, etc.), much like TF does when
+    localinfo exec_map_cfgs is set to 1 (BTW, if that is enabled on your TeamFortress server,
+    you don&#146;t have to use ThunderVote&#146;s &quot;map_cfgs&quot; feature).</font></p>
+    <hr>
+    <p></font><a name="MODCFG"></a><font face="Verdana" size="4"><strong>Mod-Specific
+    Configuration</strong></font><font SIZE="2"></p>
+    <p><a name="MODTF"></a><font size="3" face="Arial"><strong>TeamFortress</strong></font></p>
+    <p><font face="Arial">TF must be told to always run thundervote.cfg after it runs a map
+    (so voting restarts after a map is played on). To do so, the map1.cfg file in the
+    FORTRESS/QWMCYCLE directory should have this command:</font></p>
+    <blockquote>
+      <p></font><font face="Arial" color="#FF8000" SIZE="2">exec thundervote.cfg</font><font
+      SIZE="2"></p>
+    </blockquote>
+    <p><font face="Arial">and map2.cfg should be like this:</font></p>
+    <blockquote>
+      <p></font><font face="Arial" color="#FF8000" SIZE="2">serverinfo n 0</font><font SIZE="2"></p>
+    </blockquote>
+    <p><font face="Arial">Check out TF&#146;s QWSERVER.TXT file for more details on map
+    cycling.</font></p>
+    <p></font><a name="MODRACTF"></a><font size="3" face="Arial"><strong>Rocket Arena and CTF</strong></font><font
+    SIZE="2"></p>
+    </font><p><font face="Arial" size="2">You must use special versions of these mods
+    available in the <a href="../files/files.htm">Files</a> section. Currently there are
+    special versions of Clan Arena 1.3, Final Arena 1.2, Threewave CTF 4.1, Expert 1.31,
+    ThunderWalker 5.0. They offer a simple added feature that allows them to be used with
+    ThunderVote: the &quot;exec_cfg&quot; serverinfo key. Use it in the STANDARD.CFG to
+    specify what script the mod should exec instead of changing levels, like this:</font></p>
+    <blockquote>
+      <p><font face="Arial" color="#FF8000" SIZE="2">localinfo exec_cfg thundervote.cfg</font></p>
+    </blockquote>
+    <font size="1"><p></font><a name="MODOTHER"></a><font face="Arial" size="3"><strong>Support
+    for Other Mods</strong></font><font SIZE="2"></p>
+    <p><font face="Arial">If you do find out how to configure any other mod so they can work
+    with ThunderVote or if you&#146;re a mod author willing to make any changes to your mod so
+    that servers can use it with ThunderVote, contact me through e-mail: <a
+    href="mailto:neurobasher@planetquake.com">neurobasher@planetfortress.com</a>.</font></p>
+    <hr>
+    <p></font><a name="MAPENT"></a><strong><font face="Verdana" size="4">ThunderVote Map
+    Entities</font></strong><font SIZE="2"></p>
+    <p><font face="Arial">There are 2 new kinds of entities for ThunderVote maps, they are:</font></p>
+    <p></font><a name="MAPCAND"></a><font size="3"><font face="Arial"><strong>Map Candidate</strong></font></p>
+    <table border="0" cellpadding="3">
+      <tr>
+        <td align="right" valign="top" bgcolor="#206060"></font><font face="Arial" size="2"><strong>classname</strong></font></td>
+        <td valign="top" bgcolor="#206060" width="70%"><font face="Arial" size="2">map_candidate</font></td>
+      </tr>
+      <tr>
+        <td align="right" valign="top" bgcolor="#404040"><font face="Arial" size="2"><strong>map
+        [filename]</strong></font></td>
+        <td valign="top" width="70%" bgcolor="#404040"><font face="Arial" size="2">defines the
+        name of the map file (&quot;2fort5&quot;, &quot;rock2&quot;, etc.)</font></td>
+      </tr>
+      <tr>
+        <td align="right" valign="top" bgcolor="#206060"><font face="Arial" size="2"><strong>map_name
+        [string]</strong></font></td>
+        <td valign="top" bgcolor="#206060" width="70%"><font face="Arial" size="2">a more
+        descriptive name for the map (&quot;Two Forts 5&quot;, &quot;The Rock II&quot;, etc.)</font></td>
+      </tr>
+      <tr>
+        <td align="right" valign="top" bgcolor="#404040"><font face="Arial" size="2"><strong>alias
+        [string]</strong></font></td>
+        <td valign="top" width="70%" bgcolor="#404040"><font face="Arial" size="2">the name of the
+        alias the users will use to vote for the map. Usually the same value of &quot;map&quot;
+        since people usually remember maps by their map file names.</font></td>
+      </tr>
+      <tr>
+        <td align="right" valign="top" bgcolor="#206060"><font face="Arial" size="2"><strong>impulse_value
+        [value]</strong></font></td>
+        <td valign="top" bgcolor="#206060" width="70%"><font face="Arial" size="2">an impulse
+        value the alias will use (just give it a unique number, it&#146;s best to assign impulse
+        values that are not used in TeamFortress, like something in the 200+ range)</font></td>
+      </tr>
+      <tr>
+        <td align="right" valign="top" bgcolor="#404040"><font face="Arial" size="2"><strong>realteam
+        [string]</strong></font></td>
+        <td valign="top" width="70%" bgcolor="#404040"><font face="Arial" size="2">the team the
+        user will be assigned to when he votes for this map. It has to be a string with no more
+        than 4 letters, preferably unique (&quot;2FT5&quot;, &quot;ROCK&quot;, etc.)</font></td>
+      </tr>
+    </table>
+    <p><a name="MAPMOTD"></a><font face="Arial"><strong>MOTD Stuff</strong></font></p>
+    <table border="0" cellpadding="3">
+      <tr>
+        <td align="right" valign="top" bgcolor="#206060"><font face="Arial" size="2"><strong>classname</strong></font></td>
+        <td valign="top" bgcolor="#206060" width="80%"><font face="Arial" size="2">motd_stuff</font></td>
+      </tr>
+      <tr>
+        <td align="right" valign="top" bgcolor="#404040"><font face="Arial" size="2"><strong>netname
+        [string]<br>
+        target [string]<br>
+        targetname [string]<br>
+        message [string]<br>
+        noise1 [string]<br>
+        noise2 [string]<br>
+        noise3 [string]<br>
+        noise4 [string]</strong></font></td>
+        <td valign="top" width="80%" bgcolor="#404040"><font face="Arial" size="2">8 strings you
+        can use for motd messages. They will appear sequentially in this order: netname string,
+        target string, targetname string, message string, noise1 string, noise2 string, noise3
+        string, noise4 string, staying on the screen for a defined period of time. You can use
+        this to give people instructions, display list of maps, news, make an animation, whatever.</font></td>
+      </tr>
+      <tr>
+        <td align="right" valign="top" bgcolor="#206060"><font face="Arial" size="2"><strong>delay
+        [value]</strong></font></td>
+        <td valign="top" bgcolor="#206060" width="80%"><font face="Arial" size="2">defines how
+        much time in seconds each motd string will stay on screen.</font></td>
+      </tr>
+    </table>
+    <font SIZE="2"><p><font face="Arial">When defining entities for a map so that it can be
+    used with ThunderVote, remember to convert every info_player_teamspawn entities to
+    info_player_deathmatch and put at least 32 of them to minimize the chances of a telefrag
+    (telefrags won&#146;t actually occur, players will just get stuck on each other, something
+    rather annoying).</font></p>
+    <p><font face="Arial">Check out <a
+    href="http://www.planetfortress/tvote/files/vote40tv.ent">vote40tv.ent</a> for an example
+    of ThunderVote entities on a TeamFortress map.</font></font></p>
+    <font SIZE="2"><hr>
+    <p></font><a name="USERKEY"></a><font size="4"><font face="Verdana"><strong>Userinfo Keys</strong></font></p>
+    <p></font><a name="USERSERVER"></a><font face="Arial" size="3"><strong>Server Options (set
+    using serverinfo/localinfo command)</strong></font><font SIZE="2"></p>
+    <table border="0" cellpadding="3">
+      <tr>
+        <td valign="top" align="right" bgcolor="#206060"><font face="Arial" size="2"><strong>min_approval
+        [value]<br>
+        min_votes [value]<br>
+        min_time [value]<br>
+        nuf_approval [value]<br>
+        nuf_votes [value]<br>
+        nuf_time [value]</strong></font></td>
+        <td valign="top" width="70%" bgcolor="#206060"></font><font face="Arial" size="2">Defines
+        voting rules. Check the <a href="#TVCFG">THUNDERVOTE.CFG</a> section for details.</font></td>
+      </tr>
+      <tr>
+        <td valign="top" align="right" bgcolor="#404040"><font face="Arial" size="2"><strong>maps_cfg
+        [filename]</strong></font></td>
+        <td valign="top" width="70%" bgcolor="#404040"><font face="Arial" size="2">if set to a
+        value other than 0, will make the server attempt to exec a qwmcycle/&lt;mapname&gt;.cfg
+        before it changes to the &lt;mapname&gt; map and after it runs the standard.cfg. Note that
+        TeamFortress servers already exec a qwmcycle/&lt;mapname&gt;.cfg (that is, if you set
+        &quot;exec_map_cfgs 1&quot;), so this is intended for use with other mods that don&#146;t
+        offer this feature.</font></td>
+      </tr>
+      <tr>
+        <td valign="top" align="right" bgcolor="#206060"><font face="Arial" size="2"><strong>no_since
+        [value]</strong></font></td>
+        <td valign="top" width="70%" bgcolor="#206060"><font face="Arial" size="3"><small>forbids
+        a map from appearing on the map candidate list if at least N different maps weren't chosen
+        <em>since</em> last time it was chosen. This allows for some map rotation while
+        maintaining voting capabilities (NOTE: no_rep option has been removed)</small></font><font
+        face="Arial" size="2">.</font></td>
+      </tr>
+      <tr>
+        <td valign="top" align="right" bgcolor="#404040"><font face="Arial" size="2"><strong>vote_wait
+        [seconds]</strong></font></td>
+        <td valign="top" width="70%" bgcolor="#404040"><font face="Arial" size="2">before changing
+        votes, players are forced to wait 10 seconds (default). If you don&#146;t like that, you
+        can define the amount of time in seconds they should wait by setting vote_wait to a value
+        other than 0.</font></td>
+      </tr>
+      <tr>
+        <td valign="top" align="right" bgcolor="#206060"><font face="Arial" size="2"><strong>std_cfg
+        [filename]<br>
+        tv_cfg [filename]</strong></font></td>
+        <td valign="top" width="70%" bgcolor="#206060"><font face="Arial" size="2">defines
+        alternate filenames for the &quot;standard.cfg&quot; and &quot;thundervote.cfg&quot;
+        respectively. Intended for use with multiple servers that must have different
+        configurations but share the same directories and files. Defaults filenames are used if
+        you set these values to &quot;0&quot;.</font></td>
+      </tr>
+      <tr>
+        <td valign="top" align="right" bgcolor="#404040"><font face="Arial" size="2"><strong>snd_vote
+        [filename]<br>
+        snd_nope [filename]<br>
+        snd_timer [filename]<br>
+        snd_timeover [filename]<br>
+        snd_anarchy [filename]</strong></font></td>
+        <td valign="top" width="70%" bgcolor="#404040"><font face="Arial" size="2">defines
+        alternate filenames for the voting sound, voting error sound, timer sound, timeover sound
+        and anarchy mode sound respectively. Default values are &quot;doors/baseuse.wav&quot;,
+        &quot;doors/basetry.wav&quot;, &quot;doors/runetry.wav&quot;,
+        &quot;doors/meduse.wav&quot;, &quot;items/damage.wav&quot;. Set them preferably before the
+        map is run so these sounds can be precached allowing users to automatically download them.
+        Setting any of these values to &quot;0&quot; will make them use the default values.</font></td>
+      </tr>
+      <tr>
+        <td valign="top" align="right" bgcolor="#206060"><font face="Arial" size="2"><strong>no_id
+        [0/1]</strong></font></td>
+        <td valign="top" width="70%" bgcolor="#206060"><font face="Arial" size="2">disables
+        &quot;auto-id&quot; feature for all players if this key is set to a value other than 0.</font></td>
+      </tr>
+      <tr>
+        <td valign="top" align="right" bgcolor="#404040"><font face="Arial" size="2"><strong>motd1
+        [string]<br>
+        motd2 [string]</strong></font></td>
+        <td valign="top" width="70%" bgcolor="#404040"><font face="Arial" size="2">displays these
+        2 strings in the first motd screen (much like TeamFortress does).</font></td>
+      </tr>
+      <tr>
+        <td valign="top" align="right" bgcolor="#206060"><font face="Arial" size="2"><strong>no_anarchy
+        [0/1]</strong></font></td>
+        <td valign="top" width="70%" bgcolor="#206060"><font face="Arial" size="2">disables
+        anarchy mode</font></td>
+      </tr>
+      <tr>
+        <td valign="top" align="right" bgcolor="#404040"><font face="Arial" size="2"><strong>no_maphelp
+        [0/1]</strong></font></td>
+        <td valign="top" width="70%" bgcolor="#404040"><font face="Arial" size="2">disables
+        automatic dumping of map list when players connect (just in case there are too many maps
+        in the list and people start complaining about overflows).</font></td>
+      </tr>
+    </table>
+    <p><a name="USERCLIENT"></a><font size="3"><font face="Arial"><strong>Client Options (set
+    using setinfo command)</strong></font></p>
+    </font><font SIZE="2"><table border="0" cellpadding="3">
+      <tr>
+        <td valign="top" align="right" bgcolor="#206060"></font><font face="Arial" size="2"><strong>no_motd
+        [0/1]</strong></font></td>
+        <td valign="top" bgcolor="#206060" width="80%"><font face="Arial" size="2">if set to a
+        value other than 0, no motd screens will be displayed.</font></td>
+      </tr>
+      <tr>
+        <td valign="top" align="right" bgcolor="#404040"><font face="Arial" size="2"><strong>no_alias
+        [0/1]</strong></font></td>
+        <td valign="top" width="80%" bgcolor="#404040"><font face="Arial" size="2">if you
+        don&#146;t want to have the server make aliases for you, you can still vote using
+        impulses. Set this key to a value other than 0 before connecting and the maphelp command
+        (impulse 131) will display a list of mapnames and their impulse values instead of alias
+        names.</font></td>
+      </tr>
+      <tr>
+        <td valign="top" align="right" bgcolor="#206060"><font face="Arial" size="2"><strong>no_id
+        [0/1]</strong></font></td>
+        <td valign="top" bgcolor="#206060" width="80%"><font face="Arial" size="2">disables
+        &quot;auto-id&quot; feature if this key is set to a value other than 0.</font></td>
+      </tr>
+    </table>
+    <font SIZE="2"><hr>
+    <p></font><a name="VERSION"></a><font size="4"><font face="Verdana"><strong>Version Info</strong></font></p>
+    <p><a name="V20"></a><font size="3"><font face="Arial"><strong>Changes to ThunderVote 2.2</strong></font><ul>
+      <li></font><small><font face="Arial">&quot;sv_gravity&quot; isn't set anymore so that it can
+        be changed for the vote map in the server config files</font></small><font size="2"></li>
+      <li><font face="Arial">Clients execute &quot;vote.cfg&quot; on entering the vote map and
+        &quot;votedone.cfg&quot; before the mapchange to the voted map. This allows having special
+        settings only for the votemap</font></font><font size="2"></li>
+      <li><font face="Arial">&quot;mins&quot;, &quot;maxs&quot; and &quot;size&quot; of
+        &quot;info_decoration&quot; entities are only set when not present in the maps entities
+        thus allowing to actually change them by the map entities</font></font><font size="2"></li>
+      <li><font face="Arial">The sound &quot;misc/null.wav&quot; doesn't get precached anymore
+        (when specified as one of the voting sounds via the localinfo keys) as that messes up qwsv</font></font><font
+        size="3"></li>
+    </ul>
+    <p><font face="Arial"><strong>Changes to ThunderVote 2.1</strong></font><ul>
+      <li></font><font size="2" face="Arial">info_decoration entity added, a multi-function
+        decorative item</font><font size="3"></li>
+    </ul>
+    </font><p></font><a name="V20"></a><font size="3"><font face="Arial"><strong>Changes to
+    ThunderVote 2.0</strong></font><ul>
+      <li></font><font face="Arial" size="2">Advanced voting rules (min/max voting time limit,
+        min/max number/percentage of votes, min/max number/percentage of vote approval)</font><font
+        size="3"></li>
+      <li></font><font face="Arial" size="2">ANARCHY Mode</font><font size="3"></li>
+      <li><small><font face="Arial">New server options: no_maphelp, no_anarchy, snd_anarchy,
+        no_since</font></small></li>
+      <li><small><font face="Arial">&quot;no_since N&quot; server option forbids a map from
+        appearing on the map candidate list if at least N different maps weren't chosen <em>since</em>
+        last time it was chosen. This allows for some map rotation while maintaining voting
+        capabilities (no_rep option removed)</font></small></li>
+      <li><small><font face="Arial">Brazilian-portuguese version available due to some requests
+        (contact <a href="mailto:neurobasher@planetfortress.com">me</a> if you're interested in
+        having versions for other languages)</font></small></li>
+      <li><small><font face="Arial">Many other small bug fixes &amp; enhancements</font></small></font><font
+        size="4"></li>
+    </ul>
+    <p></font><a name="V10"></a><font size="3"><font face="Arial"><strong>Changes to
+    ThunderVote 1.0</strong></font><ul>
+      </font><font size="1">
+      <li></font><font size="2"><font face="Arial">Gradual alias binding reduces the chance of a
+        player getting overflowed after connecting</font></li>
+      <li><font face="Arial">Added many serverinfo and setinfo settings (see Userinfo Keys section
+        for list and descriptions)</font></li>
+      <li><font face="Arial">Translated all messages to English (FortVote was first made for a
+        Brazilian server)</font></li>
+      <li><font face="Arial">Full documentation in HTML and text versions</font></li>
+      <li><font face="Arial">Can use fraglimit 0 and timelimit 0 (although setting both to 0 is
+        not recommended)</font></li>
+      <li><font face="Arial">Added the &quot;lightning from above&quot; thing when player votes</font></li>
+      <li><font face="Arial">More flexible for use with mods other than TeamFortress</font></li>
+    </ul>
+    <p></font><a name="VF11"></a><font size="3" face="Arial"><strong>Changes to FortVote 1.1</strong></font><font
+    size="1"></p>
+    <p></font><font size="2"><font face="Arial">Dunno, didn&#146;t keep track of that. :)</font></p>
+    <hr>
+    <p><font face="Arial">URL: <a href="http://www.planetfortress.com/">http://www.planetfortress.com/tvote/</a><br>
+    email: <a href="mailto:neurobasher@planetquake.com">neurobasher@planetfortress.com</a></font></font></td>
+  </tr>
+</table>
+</center></div>
+
+<p align="right"><em><font face="Arial"><small>Any id stuff mentioned here belongs to <a
+href="http://www.idsoftware.com/">id Software</a>, TeamFortress belongs to <a
+href="http://www.teamfortress.com/">TFS</a></small><br>
+<small>Send comments and suggestions to <a href="mailto:neurobasher@planetfortress.com">Neurobasher</a>.</small></font></em></p>
+</body>
+</html>

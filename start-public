@@ -1,0 +1,2 @@
+echo RUNNING TEAM FORTRESS PUBLIC SERVER ON PORT 27500
+screen -A -m -d -S qwtf-pub ./mvdsv -port 27500 -game fortress +exec server.cfg +exec server-public.cfg
