@@ -11,7 +11,7 @@ This repository has all the files needed to run a Team Fortress server on a Linu
 
 ## Requirements
 
-- Linux server (preferably Ubuntu)
+- Linux x32 server (preferably Ubuntu)
 - SSH
 - Screen
 
