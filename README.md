@@ -11,7 +11,7 @@ This repository has all the files needed to run a Team Fortress server on a Linu
 
 ## Requirements
 
-- Linux x32 server (preferably Ubuntu)
+- Linux 32-bit server (preferably Ubuntu)
 - SSH
 - Screen
 
@@ -39,7 +39,7 @@ $ chmod 755 start-priv2
 
   ```
   ./start-priv1
-  RUNNING TEAM FORTRESS PUBLIC SERVER ON PORT 27501
+  RUNNING TEAM FORTRESS PRIVATE SERVER ON PORT 27501
   ```
 The above commands will first execute `./fortress/server.cfg` and then a specific config for each server (public or private)
 You can edit `start-public` and `start-priv[#]` as needed.
